@@ -5,10 +5,11 @@ using UnityEngine;
 public class axeScript : MonoBehaviour
 {
     public BoxCollider coll;
-    public Transform player, parentObj;
-    public GameObject pickUpUi;
+    public Transform player, parentObj, cam;
+    public GameObject pickUpUi, woodLog;
 
-    public float pickUpRange;
+    public float pickUpRange, interactionRange;
+    private bool axePickedUp = false;
 
     private void Start()
     {
@@ -17,10 +18,19 @@ public class axeScript : MonoBehaviour
 
     private void Update()
     {
+        CheckPickUp();
+        CheckLog();
+
+    }
+
+    private void CheckPickUp()
+    {
         Vector3 distanceToPlayer = player.position - transform.position;
-        if (distanceToPlayer.magnitude <= pickUpRange)
+
+        if (distanceToPlayer.magnitude <= pickUpRange && axePickedUp == false)
         {
             pickUpUi.SetActive(true);
+            pickUpUi.transform.rotation = cam.rotation;
             if (Input.GetKeyDown(KeyCode.E))
             {
                 coll.enabled = false;
@@ -29,7 +39,8 @@ public class axeScript : MonoBehaviour
                 transform.SetParent(parentObj);
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
-                this.enabled = false;
+                axePickedUp = true;
+
             }
         }
         else
@@ -37,4 +48,18 @@ public class axeScript : MonoBehaviour
             pickUpUi.SetActive(false);
         }
     }
+
+    private void CheckLog()
+    {
+        Vector3 distanceToLog = player.position - woodLog.transform.position;
+
+        if (distanceToLog.magnitude <= interactionRange && axePickedUp)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Hejsan");
+            }
+        }
+    }
+
 }
