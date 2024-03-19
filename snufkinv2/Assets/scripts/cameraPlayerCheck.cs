@@ -14,30 +14,18 @@ public class cameraPlayerCheck : MonoBehaviour
     private Vector3 targetScreenPos;
     private Vector3 playerScreenPos;
 
+    public List<GameObject> cameraPos = new List<GameObject>();
+
     void Start()
     {
         if (TargetTrans == null) Debug.LogError("Target referende is empty");
+        Debug.Log("Width" + Screen.width + "Height" + Screen.height);
     }
 
     void Update()
     {
-        //if (TargetTrans) return;
-
-        //playerScreenPos = cam.WorldToScreenPoint(PlayerTrans.position);
-        //targetScreenPos = cam.WorldToScreenPoint(TargetTrans.position);
-
-        //bool isOffScreen = targetScreenPos.x <= ScreenBorder || targetScreenPos.x >= Screen.width || targetScreenPos.y <= ScreenBorder || targetScreenPos.y >= Screen.height;
-        //if (isOffScreen)
-        //{
-        //    Debug.Log("Off-Screen");
-        //}
-        //else
-        //{
-        //    Debug.Log("On-Screen");
-        //}
-
         playerScreenPos = cam.WorldToScreenPoint(PlayerTrans.position);
-        bool isOffScreen = Mathf.Abs(playerScreenPos.x) >= Screen.width || Mathf.Abs(playerScreenPos.y) >= Screen.height;
+        bool isOffScreen = playerScreenPos.x >= Screen.width || playerScreenPos.y >= Screen.height || playerScreenPos.x <= 0 || playerScreenPos.y <= 0;
         if (isOffScreen)
         {
             Debug.Log("Off-Screen");

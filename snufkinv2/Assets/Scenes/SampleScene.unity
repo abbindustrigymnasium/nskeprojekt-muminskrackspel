@@ -1330,6 +1330,7 @@ MonoBehaviour:
   PlayerTrans: {fileID: 543450653550332120}
   WaypointIndicator: {fileID: 0}
   ScreenBorder: 1
+  cameraPos: []
 --- !u!4 &1031632034157933189
 Transform:
   m_ObjectHideFlags: 0
