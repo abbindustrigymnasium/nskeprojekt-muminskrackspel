@@ -8,27 +8,53 @@ public class cameraPlayerCheck : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform TargetTrans;
     [SerializeField] private Transform PlayerTrans;
-    [SerializeField] private Transform WaypointIndicator;
-    [SerializeField] private float ScreenBorder = 10;
 
     private Vector3 targetScreenPos;
     private Vector3 playerScreenPos;
 
-    public List<GameObject> cameraPos = new List<GameObject>();
+    public List<Transform> cameraPos = new List<Transform>();
+    private int currentCameraIndex = 0;
 
     void Start()
     {
         if (TargetTrans == null) Debug.LogError("Target referende is empty");
         Debug.Log("Width" + Screen.width + "Height" + Screen.height);
+
     }
 
     void Update()
     {
-        playerScreenPos = cam.WorldToScreenPoint(PlayerTrans.position);
-        bool isOffScreen = playerScreenPos.x >= Screen.width || playerScreenPos.y >= Screen.height || playerScreenPos.x <= 0 || playerScreenPos.y <= 0;
-        if (isOffScreen)
+        Vector3 viewportPoint = cam.WorldToViewportPoint(PlayerTrans.position);
+        if (viewportPoint.x < 0 || viewportPoint.x > 1)
         {
-            Debug.Log("Off-Screen");
+            if (viewportPoint.x < 0)
+            {
+                if (currentCameraIndex != 1)
+                {
+                    currentCameraIndex = 1;
+                    MoveCameraToPosition();
+                }
+            }
+            else
+            {
+                if (currentCameraIndex != 0)
+                {
+                    currentCameraIndex = 0;
+                    MoveCameraToPosition();
+                }
+            }
+        }
+    }
+
+    void MoveCameraToPosition()
+    {
+        if (currentCameraIndex >= 0 && currentCameraIndex < cameraPos.Count)
+        {
+            cam.transform.position = cameraPos[currentCameraIndex].position;
+        }
+        else
+        {
+            Debug.LogError("Invalid camera position index: " + currentCameraIndex);
         }
     }
 }
